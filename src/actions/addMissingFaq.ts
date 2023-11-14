@@ -3,7 +3,8 @@ import { ActionDefinition, ActionContext, OutputParametersObject } from '@conner
 const action: ActionDefinition = {
   key: 'addMissingFaq',
   title: 'Add missing FAQ',
-  description: 'Add the missing FAQ to the Google Sheet. The administrator must approve the new FAQ before the &quot;Get answer&quot; action can use it.',
+  description:
+    'Add the missing FAQ to the Google Sheet. The administrator must approve the new FAQ before the &quot;Get answer&quot; action can use it.',
   type: 'create',
   inputParameters: [],
   operation: {

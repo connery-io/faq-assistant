@@ -5,27 +5,33 @@ FAQ plugin allows you to ask questions and receive answers against a Google Shee
 ## Authorization with Google Sheets
 
 This plugin requires OAuth2 authorization to access the Google Sheets API.
-To authorize the plugin to access your Google Sheets, you need to specify Client ID and Client Secret in the plugin configuration parameters.
+To authorize the plugin to access your Google Sheets, you must provide a JSON Key from a Google Cloud Platform service account. This service account must have access to the Google Sheet you want to use with this plugin.
 
-Follow these steps to get the Client ID and Client Secret:
+Follow these steps to get the JSON Key, grant access to the Google Sheet, and configure the plugin:
 
-**1. Enable the Google Sheets API**
+**1. Create a Service Account**
 
-1. Go to the Google Developers Console.
-2. Create a new project or select an existing one.
-3. Enable the Google Sheets API for your project.
+- Go to the [Google Cloud Console](https://console.cloud.google.com/).
+- Select your project, go to "IAM & Admin" > "Service Accounts", and create a new service account.
+- Grant the necessary permissions to the service account based on what actions it needs to perform.
+- Create and download a JSON Key file for the service account. This file contains the credentials used to authenticate your server-to-server API requests.
 
-**2. Create Credentials**
+**2. Share Google Sheet with Service Account**
 
-1. In the Google Developers Console, go to the "Credentials" page.
-2. Click on “Create Credentials” and choose “OAuth client ID”.
-3. Set up the OAuth consent screen if prompted.
-4. Choose the application type (e.g., Web application, Other).
-5. Save the credentials (you’ll get a client ID and client secret).
+- Find the service account's email address in the JSON Key file or in the service account details in the Google Cloud Console.
+- Share the Google Sheet with this service account email, just like you would with any regular user.
 
-**3. Configure the plugin**
+**3. Enable Google Sheets API**
 
-1. Copy the Client ID and Client Secret to the plugin configuration parameters.
+- Go to the [Google Cloud Console](https://console.cloud.google.com/).
+- Make sure you are logged in with the correct Google account and select correct project.
+- Navigate to "APIs & Services" > "Dashboard".
+- Click on “+ ENABLE APIS AND SERVICES” at the top.
+- Search for "Google Sheets API", select it, and click “Enable”.
+
+**4. Configure the plugin**
+
+1. Copy the JSON Key to the plugin configuration parameters when installin the plugin on the runner.
 
 ## Available actions
 

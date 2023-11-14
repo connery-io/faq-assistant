@@ -1,15 +1,42 @@
 import { ActionDefinition, ActionContext, OutputParametersObject } from '@connery-io/sdk';
+import { authorizeAndGetSheetsClient } from '../shared/utils';
+import { FaqItem } from '../shared/types';
+import { ChatOpenAI, HumanMessage, SystemMessage } from '../shared/lanchainWrapper';
 
 const action: ActionDefinition = {
   key: 'getAnswer',
   title: 'Get answer',
-  description: 'Get an answer to your question from the predefined list of FAQs in a Google Sheet. Every access to the FAQs will be logged to a separate Google Sheet.',
+  description:
+    'Get an answer to your question from the predefined list of FAQs in a Google Sheet. Every access to the FAQs will be logged to a separate Google Sheet.',
   type: 'read',
-  inputParameters: [],
+  inputParameters: [
+    {
+      key: 'questionPrompt',
+      title: 'Question prompt',
+      description: 'The question prompt to the FAQ list.',
+      type: 'string',
+      validation: {
+        required: true,
+      },
+    },
+  ],
   operation: {
     handler: handler,
   },
-  outputParameters: [],
+  outputParameters: [
+    {
+      key: 'faqQuestion',
+      title: 'FAQ Question',
+      description: 'Question from the FAQ list.',
+      type: 'string',
+    },
+    {
+      key: 'faqAnswer',
+      title: 'FAQ Answer',
+      description: 'Answer from the FAQ list.',
+      type: 'string',
+    },
+  ],
 };
 export default action;
 
@@ -17,7 +44,67 @@ export async function handler({
   inputParameters,
   configurationParameters,
 }: ActionContext): Promise<OutputParametersObject> {
-  // TODO: Implement the action logic.
+  const doc = await authorizeAndGetSheetsClient(
+    configurationParameters.jsonKey,
+    configurationParameters.faqListSheetId,
+  );
 
-  return {};
+  const sheet = doc.sheetsByIndex[0];
+  const rows = await sheet.getRows();
+
+  // Convert the response to a list of FAQs
+  const faqList: FaqItem[] = rows.map((row) => ({
+    question: row.get('Question'),
+    answer: row.get('Answer'),
+  }));
+
+  const chat = new ChatOpenAI({
+    openAIApiKey: configurationParameters.openAiApiKey,
+    modelName: 'gpt-3.5-turbo-0613',
+  }).bind({
+    functions: generateFunctionSchema(faqList),
+  });
+
+  const chatResult = await chat.invoke([
+    new SystemMessage(
+      `You are an FAQ agent of our firm and want to provide the most helpful answer based on the predefined list of FAQs.`,
+    ),
+    new HumanMessage(inputParameters.questionPrompt),
+  ]);
+
+  const functionCall = chatResult.additional_kwargs?.function_call;
+
+  let result = {};
+  if (functionCall) {
+    const faq = faqList[getIndexFromFunctionName(functionCall.name)];
+    result = {
+      faqQuestion: faq.question,
+      faqAnswer: faq.answer,
+    };
+  }
+
+  return result;
+}
+
+function getIndexFromFunctionName(functionName: string) {
+  return parseInt(functionName.replace('faq', ''));
+}
+
+function generateFunctionSchema(faqList: FaqItem[]) {
+  // generate function calling scema from faqList to pass it to OpenAI
+  const functionSchema = [];
+
+  for (var i = 0; i < faqList.length; i++) {
+    functionSchema.push({
+      name: `faq${i}`,
+      description: faqList[i].question,
+      parameters: {
+        type: 'object',
+        properties: {},
+        required: [],
+      },
+    });
+  }
+
+  return functionSchema;
 }

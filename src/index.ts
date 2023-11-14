@@ -1,13 +1,50 @@
 import { PluginDefinition } from '@connery-io/sdk';
-import addMissingFaq from './actions/addMissingFaq';
+/*import addMissingFaq from './actions/addMissingFaq';*/
 import getAnswer from './actions/getAnswer';
 
 const plugin: PluginDefinition = {
   title: 'FAQ Plugin',
   description:
     'FAQ plugin allows you to ask questions and receive answers against a Google Sheet with a predefined list of questions and answers.',
-  actions: [addMissingFaq, getAnswer],
-  configurationParameters: [],
+  actions: [getAnswer /*, addMissingFaq*/],
+  configurationParameters: [
+    {
+      key: 'faqListSheetId',
+      title: 'FAQ List Sheet ID',
+      description: 'ID of the Google Sheet with the list of FAQs.',
+      type: 'string',
+      validation: {
+        required: true,
+      },
+    },
+    {
+      key: 'faqLogSheetId',
+      title: 'FAQ Log Sheet ID',
+      description: 'ID of the Google Sheet where the access to the FAQs will be logged.',
+      type: 'string',
+      validation: {
+        required: true,
+      },
+    },
+    {
+      key: 'jsonKey',
+      title: 'JSON Key',
+      description: 'JSON key of the Google Cloud service account with access to the Google Sheets.',
+      type: 'string',
+      validation: {
+        required: true,
+      },
+    },
+    {
+      key: 'openAiApiKey',
+      title: 'OpenAI API Key',
+      description: 'OpenAI API key to access the OpenAI API to identify the FAQ based on the user prompt.',
+      type: 'string',
+      validation: {
+        required: true,
+      },
+    },
+  ],
   maintainers: [
     {
       name: 'Connery',

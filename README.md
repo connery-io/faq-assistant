@@ -2,6 +2,31 @@
 
 FAQ plugin allows you to ask questions and receive answers against a Google Sheet with a predefined list of questions and answers.
 
+## Authorization with Google Sheets
+
+This plugin requires OAuth2 authorization to access the Google Sheets API.
+To authorize the plugin to access your Google Sheets, you need to specify Client ID and Client Secret in the plugin configuration parameters.
+
+Follow these steps to get the Client ID and Client Secret:
+
+**1. Enable the Google Sheets API**
+
+1. Go to the Google Developers Console.
+2. Create a new project or select an existing one.
+3. Enable the Google Sheets API for your project.
+
+**2. Create Credentials**
+
+1. In the Google Developers Console, go to the "Credentials" page.
+2. Click on “Create Credentials” and choose “OAuth client ID”.
+3. Set up the OAuth consent screen if prompted.
+4. Choose the application type (e.g., Web application, Other).
+5. Save the credentials (you’ll get a client ID and client secret).
+
+**3. Configure the plugin**
+
+1. Copy the Client ID and Client Secret to the plugin configuration parameters.
+
 ## Available actions
 
 | Action                                           | Description                                                                                                                                            |

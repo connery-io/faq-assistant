@@ -2,7 +2,13 @@
 
 FAQ plugin allows you to ask questions and receive answers against a Google Sheet with a predefined list of questions and answers.
 
-## Authorization with Google Sheets
+## Configuration
+
+### FAQ sheets preparation
+
+TBD
+
+### Authorization with Google Sheets
 
 This plugin requires OAuth2 authorization to access the Google Sheets API.
 To authorize the plugin to access your Google Sheets, you must provide a JSON Key from a Google Cloud Platform service account. This service account must have access to the Google Sheet you want to use with this plugin.

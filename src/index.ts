@@ -43,6 +43,16 @@ const plugin: PluginDefinition = {
         required: true,
       },
     },
+    {
+      key: 'openAiModel',
+      title: 'OpenAI Model',
+      description:
+        'OpenAI model to use to identify the FAQ based on the user prompt. We recommend using gpt-3.5-turbo-0613.',
+      type: 'string',
+      validation: {
+        required: true,
+      },
+    },
   ],
   maintainers: [
     {

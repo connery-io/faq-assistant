@@ -66,7 +66,7 @@ export async function handler({
   // Search the FAQ list for the most relevant answer to the question prompt
   const chat = new ChatOpenAI({
     openAIApiKey: configurationParameters.openAiApiKey,
-    modelName: 'gpt-3.5-turbo-0613',
+    modelName: configurationParameters.openAiModel,
   }).bind({
     functions: generateFunctionSchema(faqList),
   });

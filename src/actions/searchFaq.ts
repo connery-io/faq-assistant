@@ -1,12 +1,13 @@
 import { ActionDefinition, ActionContext, OutputParametersObject } from '@connery-io/sdk';
-import { authorizeAndGetSheetsClient } from '../shared/utils';
+import { authorizeAndGetSheet, generateFunctionSchema, getIndexFromFunctionName } from '../shared/utils';
 import { FaqItem } from '../shared/types';
 import { ChatOpenAI, HumanMessage, SystemMessage } from '../shared/lanchainWrapper';
 
 const action: ActionDefinition = {
   key: 'searchFaq',
   title: 'Search FAQ',
-  description: 'Search the FAQ list for the most relevant answer to the question prompt. Every access to the FAQs will be logged to a separate Google Sheet.',
+  description:
+    'Search the FAQ list for the most relevant answer to the question prompt. Every access to the FAQs will be logged to a separate Google Sheet.',
   type: 'read',
   inputParameters: [
     {
@@ -26,10 +27,11 @@ const action: ActionDefinition = {
     {
       key: 'searchStatus',
       title: 'Search Status',
-      description: 'Status of the search. If the search was successful, the status will be "found". If the search was unsuccessful, the status will be "not_found".',
+      description:
+        'Status of the search. If the search was successful, the status will be "found". If the search was unsuccessful, the status will be "not_found".',
       type: 'string',
       validation: {
-        required: true
+        required: true,
       },
     },
     {
@@ -52,12 +54,7 @@ export async function handler({
   inputParameters,
   configurationParameters,
 }: ActionContext): Promise<OutputParametersObject> {
-  const doc = await authorizeAndGetSheetsClient(
-    configurationParameters.jsonKey,
-    configurationParameters.faqListSheetId,
-  );
-
-  const sheet = doc.sheetsByIndex[0];
+  const sheet = await authorizeAndGetSheet(configurationParameters.jsonKey, configurationParameters.faqListSheetId);
   const rows = await sheet.getRows();
 
   // Convert the response to a list of FAQs
@@ -66,6 +63,7 @@ export async function handler({
     answer: row.get('Answer'),
   }));
 
+  // Search the FAQ list for the most relevant answer to the question prompt
   const chat = new ChatOpenAI({
     openAIApiKey: configurationParameters.openAiApiKey,
     modelName: 'gpt-3.5-turbo-0613',
@@ -80,41 +78,30 @@ export async function handler({
     new HumanMessage(inputParameters.questionPrompt),
   ]);
 
+  // Convert the chat result to the output parameters
+  const result = {
+    searchStatus: 'not_found',
+    faqQuestion: undefined,
+    faqAnswer: undefined,
+  };
   const functionCall = chatResult.additional_kwargs?.function_call;
-
   if (functionCall) {
     const faq = faqList[getIndexFromFunctionName(functionCall.name)];
-    return {
-      searchStatus: 'found',
-      faqQuestion: faq.question,
-      faqAnswer: faq.answer,
-    };
-  } else {
-    return {
-      searchStatus: 'not_found',
-    };
-  }
-}
-
-function getIndexFromFunctionName(functionName: string) {
-  return parseInt(functionName.replace('faq', ''));
-}
-
-function generateFunctionSchema(faqList: FaqItem[]) {
-  // generate function calling scema from faqList to pass it to OpenAI
-  const functionSchema = [];
-
-  for (var i = 0; i < faqList.length; i++) {
-    functionSchema.push({
-      name: `faq${i}`,
-      description: faqList[i].question,
-      parameters: {
-        type: 'object',
-        properties: {},
-        required: [],
-      },
-    });
+    result.searchStatus = 'found';
+    result.faqQuestion = faq.question;
+    result.faqAnswer = faq.answer;
   }
 
-  return functionSchema;
+  // Log the search to a separate Google Sheet
+  const logSheet = await authorizeAndGetSheet(configurationParameters.jsonKey, configurationParameters.faqLogSheetId);
+  await logSheet.addRow({
+    'Question Prompt': inputParameters.questionPrompt,
+    'Search Status': result.searchStatus,
+    'FAQ Question': result.faqQuestion,
+    'FAQ Answer': result.faqAnswer,
+    'Search Timestamp': new Date().toISOString(),
+  });
+
+  // Return the output parameters
+  return result;
 }

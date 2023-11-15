@@ -1,12 +1,35 @@
 # FAQ Plugin
 
-FAQ plugin allows you to ask questions and receive answers against a Google Sheet with a predefined list of questions and answers.
+The FAQ plugin allows you to ask questions and receive answers against a Google Sheet with a predefined list of questions and answers.
 
 ## Plugin configuration
 
 ### FAQ sheets preparation
 
-TBD
+**1. Create "FAQ List" sheet**
+
+This sheet should contain the list of questions and answers that the plugin will use to answer your questions.
+
+![FAQ List Google Sheet](/img/faq-list.png)
+
+- Create a "FAQ List" Google Sheet with the following columns: "Question" and "Answer".
+  - The first row should contain the exact names of the columns.
+  - The sheet may also contain other columns if needed.
+- Add the questions and answers to the sheet.
+
+**2. Create "FAQ Log" sheet**
+
+This sheet will be used to log all the questions asked to the plugin.
+
+![FAQ Log Google Sheet](/img/faq-log.png)
+
+- Create a "FAQ Log" Google Sheet with the following columns: "Question Prompt", "Search Status", "FAQ Question", "FAQ Answer", "Search Timestamp".
+  - The first row should contain the exact names of the columns.
+  - The sheet may also contain other columns if needed.
+
+**3. Share both sheets with the service account**
+
+- Share both Google Sheets with the service account email address (see below).
 
 ### Authorization with Google Sheets
 
@@ -22,10 +45,10 @@ Follow these steps to get the JSON Key, grant access to the Google Sheet, and co
 - Grant the necessary permissions to the service account based on what actions it needs to perform.
 - Create and download a JSON Key file for the service account. This file contains the credentials used to authenticate your server-to-server API requests.
 
-**2. Share Google Sheet with Service Account**
+**2. Share the Google Sheets with Service Account**
 
 - Find the service account's email address in the JSON Key file or in the service account details in the Google Cloud Console.
-- Share the Google Sheet with this service account email, just like you would with any regular user.
+- Share the Google Sheets with this service account email, just like you would with any regular user.
 
 **3. Enable Google Sheets API**
 
@@ -37,7 +60,7 @@ Follow these steps to get the JSON Key, grant access to the Google Sheet, and co
 
 **4. Configure the plugin**
 
-1. Copy the JSON Key to the plugin configuration parameters when installin the plugin on the runner.
+- Copy the JSON Key to the plugin configuration parameters when installin the plugin on the runner.
 
 ## Available actions
 

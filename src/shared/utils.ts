@@ -1,7 +1,8 @@
 import { GoogleSpreadsheet } from './googleSpreadsheetWrapper';
 import { JWT } from 'google-auth-library';
+import { FaqItem } from './types';
 
-export async function authorizeAndGetSheetsClient(jsonKey: string, spreadsheetId: string): Promise<any> {
+export async function authorizeAndGetSheet(jsonKey: string, spreadsheetId: string): Promise<any> {
   const credentials = JSON.parse(jsonKey);
 
   const serviceAccountAuth = new JWT({
@@ -13,26 +14,29 @@ export async function authorizeAndGetSheetsClient(jsonKey: string, spreadsheetId
   const doc = new GoogleSpreadsheet(spreadsheetId, serviceAccountAuth);
   await doc.loadInfo();
 
-  return doc;
+  const sheet = doc.sheetsByIndex[0];
+  return sheet;
 }
 
-/*
-import { google, sheets_v4 } from 'googleapis';
-
-export async function authorizeAndGetSheetsClient(jsonKey: string): Promise<sheets_v4.Sheets> {
-  const credentials = JSON.parse(jsonKey);
-
-  // Configure a JWT client with the service account
-  const jwtClient = new google.auth.JWT(credentials.client_email, undefined, credentials.private_key, [
-    'https://www.googleapis.com/auth/spreadsheets',
-  ]);
-
-  // Authenticate request
-  await jwtClient.authorize();
-
-  // Create Google Sheets API client
-  const sheets = google.sheets({ version: 'v4', auth: jwtClient });
-
-  return sheets;
+export function getIndexFromFunctionName(functionName: string): number {
+  return parseInt(functionName.replace('faq', ''));
 }
-*/
+
+export function generateFunctionSchema(faqList: FaqItem[]): any[] {
+  // generate function calling scema from faqList to pass it to OpenAI
+  const functionSchema = [];
+
+  for (var i = 0; i < faqList.length; i++) {
+    functionSchema.push({
+      name: `faq${i}`,
+      description: faqList[i].question,
+      parameters: {
+        type: 'object',
+        properties: {},
+        required: [],
+      },
+    });
+  }
+
+  return functionSchema;
+}

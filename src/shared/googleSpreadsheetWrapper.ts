@@ -1,5 +1,5 @@
-// Import the module using CommonJS syntax
+// Import using CommonJS syntax
 const { GoogleSpreadsheet: GoogleSpreadsheetClass } = require('google-spreadsheet');
 
-// Export the class as a named export
+// Export as named exports
 export { GoogleSpreadsheetClass as GoogleSpreadsheet };

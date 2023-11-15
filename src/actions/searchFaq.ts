@@ -24,6 +24,15 @@ const action: ActionDefinition = {
   },
   outputParameters: [
     {
+      key: 'searchStatus',
+      title: 'Search Status',
+      description: 'Status of the search. If the search was successful, the status will be "success". If the search was unsuccessful, the status will be "not_found".',
+      type: 'string',
+      validation: {
+        required: true
+      },
+    },
+    {
       key: 'faqQuestion',
       title: 'FAQ Question',
       description: 'Question from the FAQ list.',
@@ -73,16 +82,18 @@ export async function handler({
 
   const functionCall = chatResult.additional_kwargs?.function_call;
 
-  let result = {};
   if (functionCall) {
     const faq = faqList[getIndexFromFunctionName(functionCall.name)];
-    result = {
+    return {
+      searchStatus: 'success',
       faqQuestion: faq.question,
       faqAnswer: faq.answer,
     };
+  } else {
+    return {
+      searchStatus: 'not_found',
+    };
   }
-
-  return result;
 }
 
 function getIndexFromFunctionName(functionName: string) {

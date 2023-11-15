@@ -26,7 +26,7 @@ const action: ActionDefinition = {
     {
       key: 'searchStatus',
       title: 'Search Status',
-      description: 'Status of the search. If the search was successful, the status will be "success". If the search was unsuccessful, the status will be "not_found".',
+      description: 'Status of the search. If the search was successful, the status will be "found". If the search was unsuccessful, the status will be "not_found".',
       type: 'string',
       validation: {
         required: true
@@ -85,7 +85,7 @@ export async function handler({
   if (functionCall) {
     const faq = faqList[getIndexFromFunctionName(functionCall.name)];
     return {
-      searchStatus: 'success',
+      searchStatus: 'found',
       faqQuestion: faq.question,
       faqAnswer: faq.answer,
     };

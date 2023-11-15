@@ -2,7 +2,7 @@
 
 FAQ plugin allows you to ask questions and receive answers against a Google Sheet with a predefined list of questions and answers.
 
-## Configuration
+## Plugin configuration
 
 ### FAQ sheets preparation
 

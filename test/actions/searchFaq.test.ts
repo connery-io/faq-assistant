@@ -1,8 +1,8 @@
-import { handler } from '../../src/actions/getAnswer';
+import { handler } from '../../src/actions/searchFaq';
 
 // TODO #1: Rename xit() to it() to enable the test.
 // TODO #2: Change the test name below to match your use case.
-xit('should verify if the getAnswer action works as expected', async () => {
+xit('should verify if the searchFaq action works as expected', async () => {
   const configurationParameters = {
     /* TODO #3: Specify configuration parameters for the plugin. */
   };

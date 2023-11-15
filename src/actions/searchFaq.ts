@@ -4,16 +4,15 @@ import { FaqItem } from '../shared/types';
 import { ChatOpenAI, HumanMessage, SystemMessage } from '../shared/lanchainWrapper';
 
 const action: ActionDefinition = {
-  key: 'getAnswer',
-  title: 'Get answer',
-  description:
-    'Get an answer to your question from the predefined list of FAQs in a Google Sheet. Every access to the FAQs will be logged to a separate Google Sheet.',
+  key: 'searchFaq',
+  title: 'Search FAQ',
+  description: 'Search the FAQ list for the most relevant answer to the question prompt. Every access to the FAQs will be logged to a separate Google Sheet.',
   type: 'read',
   inputParameters: [
     {
       key: 'questionPrompt',
       title: 'Question prompt',
-      description: 'The question prompt to the FAQ list.',
+      description: 'The question prompt to search the FAQ list for the most relevant answer.',
       type: 'string',
       validation: {
         required: true,

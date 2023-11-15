@@ -1,12 +1,12 @@
 import { PluginDefinition } from '@connery-io/sdk';
 /*import addMissingFaq from './actions/addMissingFaq';*/
-import getAnswer from './actions/getAnswer';
+import searchFaq from './actions/searchFaq';
 
 const plugin: PluginDefinition = {
   title: 'FAQ Plugin',
   description:
     'FAQ plugin allows you to ask questions and receive answers against a Google Sheet with a predefined list of questions and answers.',
-  actions: [getAnswer /*, addMissingFaq*/],
+  actions: [searchFaq /*, addMissingFaq*/],
   configurationParameters: [
     {
       key: 'faqListSheetId',

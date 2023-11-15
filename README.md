@@ -38,7 +38,7 @@ Follow these steps to get the JSON Key, grant access to the Google Sheet, and co
 | Action                                           | Description                                                                                                                                            |
 | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | [Add missing FAQ](/src/actions/addMissingFaq.ts) | Add the missing FAQ to the Google Sheet. The administrator must approve the new FAQ before the &quot;Get answer&quot; action can use it.               |
-| [Get answer](/src/actions/getAnswer.ts)          | Get an answer to your question from the predefined list of FAQs in a Google Sheet. Every access to the FAQs will be logged to a separate Google Sheet. |
+| [Get answer](/src/actions/searchFaq.ts)          | Get an answer to your question from the predefined list of FAQs in a Google Sheet. Every access to the FAQs will be logged to a separate Google Sheet. |
 
 ## Repository structure
 

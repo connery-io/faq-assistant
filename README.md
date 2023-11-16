@@ -2,9 +2,9 @@
 
 The FAQ plugin allows you to ask questions and receive answers against a Google Sheet with a predefined list of questions and answers.
 
-## Plugin configuration
+## How to set up the plugin
 
-### FAQ sheets preparation
+### Prepare Google Sheets
 
 **1. Create "FAQ List" sheet**
 
@@ -31,7 +31,7 @@ This sheet will be used to log all the questions asked to the plugin.
 
 - Share both Google Sheets with the service account email address (see below).
 
-### Authorization with Google Sheets
+### Create a service account on Google Cloud Platform
 
 This plugin requires OAuth2 authorization to access the Google Sheets API.
 To authorize the plugin to access your Google Sheets, you must provide a JSON Key from a Google Cloud Platform service account. This service account must have access to the Google Sheet you want to use with this plugin.
@@ -61,6 +61,11 @@ Follow these steps to get the JSON Key, grant access to the Google Sheet, and co
 **4. Configure the plugin**
 
 - Copy the JSON Key to the plugin configuration parameters when installin the plugin on the runner.
+
+### Install the plugin on Connery runner
+
+- Read how to install plugins on Connery runner in this guide: [Install plugin on the runner](https://docs.connery.io/docs/platform/quick-start/install-plugin-on-the-runner)
+- Configure all the configuration parameters for the plugin.
 
 ## Available actions
 

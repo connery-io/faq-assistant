@@ -1,9 +1,10 @@
-import { ActionDefinition, ActionContext, OutputParametersObject } from '@connery-io/sdk';
-import { authorizeAndGetSheet, generateFunctionSchema, getIndexFromFunctionName } from '../shared/utils';
-import { FaqItem } from '../shared/types';
-import { ChatOpenAI, HumanMessage, SystemMessage } from '../shared/lanchainWrapper';
+import { ActionDefinition, ActionContext, OutputObject } from 'connery';
+import { authorizeAndGetSheet, generateFunctionSchema, getIndexFromFunctionName } from '../shared/utils.js';
+import { FaqItem } from '../shared/types.js';
+import { HumanMessage, SystemMessage } from 'langchain/schema';
+import { ChatOpenAI } from 'langchain/chat_models/openai';
 
-const action: ActionDefinition = {
+const actionDefinition: ActionDefinition = {
   key: 'searchFaq',
   title: 'Search FAQ',
   description:
@@ -48,25 +49,22 @@ const action: ActionDefinition = {
     },
   ],
 };
-export default action;
+export default actionDefinition;
 
-export async function handler({
-  inputParameters,
-  configurationParameters,
-}: ActionContext): Promise<OutputParametersObject> {
-  const sheet = await authorizeAndGetSheet(configurationParameters.jsonKey, configurationParameters.faqListSheetId);
+export async function handler({ input, configuration }: ActionContext): Promise<OutputObject> {
+  const sheet = await authorizeAndGetSheet(configuration.jsonKey, configuration.faqListSheetId);
   const rows = await sheet.getRows();
 
   // Convert the response to a list of FAQs
-  const faqList: FaqItem[] = rows.map((row) => ({
+  const faqList: FaqItem[] = rows.map((row: any) => ({
     question: row.get('Question'),
     answer: row.get('Answer'),
   }));
 
   // Search the FAQ list for the most relevant answer to the question prompt
   const chat = new ChatOpenAI({
-    openAIApiKey: configurationParameters.openAiApiKey,
-    modelName: configurationParameters.openAiModel,
+    openAIApiKey: configuration.openAiApiKey,
+    modelName: configuration.openAiModel,
   }).bind({
     functions: generateFunctionSchema(faqList),
   });
@@ -75,11 +73,11 @@ export async function handler({
     new SystemMessage(
       `You are an FAQ agent of our firm and want to provide the most helpful answer based on the predefined list of FAQs.`,
     ),
-    new HumanMessage(inputParameters.questionPrompt),
+    new HumanMessage(input.questionPrompt),
   ]);
 
   // Convert the chat result to the output parameters
-  const result = {
+  const result: any = {
     searchStatus: 'not_found',
     faqQuestion: undefined,
     faqAnswer: undefined,
@@ -93,9 +91,9 @@ export async function handler({
   }
 
   // Log the search to a separate Google Sheet
-  const logSheet = await authorizeAndGetSheet(configurationParameters.jsonKey, configurationParameters.faqLogSheetId);
+  const logSheet = await authorizeAndGetSheet(configuration.jsonKey, configuration.faqLogSheetId);
   await logSheet.addRow({
-    'Question Prompt': inputParameters.questionPrompt,
+    'Question Prompt': input.questionPrompt,
     'Search Status': result.searchStatus,
     'FAQ Question': result.faqQuestion,
     'FAQ Answer': result.faqAnswer,

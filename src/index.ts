@@ -1,10 +1,10 @@
-import { PluginDefinition } from '@connery-io/sdk';
-import searchFaq from './actions/searchFaq';
+import { PluginDefinition, startPluginServer } from 'connery';
+import searchFaq from './actions/searchFaq.js';
 
-const plugin: PluginDefinition = {
-  title: 'FAQ Plugin',
+const pluginDefinition: PluginDefinition = {
+  title: 'Google Sheets FAQ Plugin',
   description:
-    'FAQ plugin allows you to ask questions and receive answers against a Google Sheet with a predefined list of questions and answers.',
+    'The FAQ plugin allows you to ask questions and receive answers against a Google Sheet with a predefined list of questions and answers.',
   actions: [searchFaq],
   configurationParameters: [
     {
@@ -60,8 +60,6 @@ const plugin: PluginDefinition = {
       email: 'support@connery.io',
     },
   ],
-  connery: {
-    runnerVersion: '0',
-  },
 };
-export default plugin;
+
+startPluginServer(pluginDefinition);

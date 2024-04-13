@@ -2,9 +2,9 @@
 
 The FAQ plugin allows you to ask questions and receive answers against a Google Sheet with a predefined list of questions and answers.
 
-## Plugin configuration
+## How to set up the plugin
 
-### FAQ sheets preparation
+### Prepare Google Sheets
 
 **1. Create "FAQ List" sheet**
 
@@ -31,7 +31,7 @@ This sheet will be used to log all the questions asked to the plugin.
 
 - Share both Google Sheets with the service account email address (see below).
 
-### Authorization with Google Sheets
+### Create a service account on Google Cloud Platform
 
 This plugin requires OAuth2 authorization to access the Google Sheets API.
 To authorize the plugin to access your Google Sheets, you must provide a JSON Key from a Google Cloud Platform service account. This service account must have access to the Google Sheet you want to use with this plugin.
@@ -62,34 +62,20 @@ Follow these steps to get the JSON Key, grant access to the Google Sheet, and co
 
 - Copy the JSON Key to the plugin configuration parameters when installin the plugin on the runner.
 
-## Available actions
-
-| Action                                  | Description                                                                                                                                  |
-| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Search FAQ](/src/actions/searchFaq.ts) | Search the FAQ list for the most relevant answer to the question prompt. Every access to the FAQs will be logged to a separate Google Sheet. |
-
 ## Repository structure
 
-The entry point for this plugin is the [./src/index.ts](/src/index.ts) file.
-It contains the plugin definition and references to all the actions.
+This repository contains the plugin's source code.
 
-The [./src/actions/](/src/actions/) folder contains all the actions this plugin defines.
-Every action is represented by a separate file with the action definition and implementation.
+| Path                            | Description                                                                                                                                          |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [./src/index.ts](/src/index.ts) | **The entry point for the plugin.** It contains the plugin definition and references to all the actions.                                             |
+| [./src/actions/](/src/actions/) | **This folder contains all the actions of the plugin.** Each action is represented by a separate file with the action definition and implementation. |
 
-The [./dist/plugin.js](/dist/plugin.js) file is the bundled version of the plugin with all the dependencies.
-Connery uses this file to run the plugin.
+## Built using Connery SDK
 
-## Connery
+This plugin is built using [Connery SDK](https://github.com/connery-io/connery), the open-source SDK for AI plugins and actions development.
 
-This repository is a plugin for [Connery](https://connery.io).
-
-Connery is an open-source plugin ecosystem for AI and No-Code.
-
-Learn more about Connery:
-
-- [Documentation](https://docs.connery.io)
-- [Source code](https://github.com/connery-io/connery-platform)
-- [How to start using this plugin with Connery?](https://docs.connery.io/docs/platform/quick-start/)
+[Learn how to use the plugin and its actions.](https://sdk.connery.io/docs/quickstart/use-plugin)
 
 ## Support
 

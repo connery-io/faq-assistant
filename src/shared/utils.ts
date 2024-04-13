@@ -1,6 +1,6 @@
-import { GoogleSpreadsheet } from './googleSpreadsheetWrapper';
 import { JWT } from 'google-auth-library';
-import { FaqItem } from './types';
+import { GoogleSpreadsheet } from 'google-spreadsheet';
+import { FaqItem } from './types.js';
 
 export async function authorizeAndGetSheet(jsonKey: string, spreadsheetId: string): Promise<any> {
   const credentials = JSON.parse(jsonKey);

@@ -90,7 +90,7 @@ export async function handler({
     );
   } else {
     textResponse =
-      'Sorry, I could not find any relevant FAQ in the list.\n\nPlease report the missing FAQ to the manager.';
+      'Sorry, I could not find any relevant FAQs on the list.\n\nPlease report the missing FAQ to the manager.';
 
     await logRequest(
       configurationParameters.jsonKey,

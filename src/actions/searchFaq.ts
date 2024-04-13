@@ -26,26 +26,13 @@ const actionDefinition: ActionDefinition = {
   },
   outputParameters: [
     {
-      key: 'searchStatus',
-      title: 'Search Status',
-      description:
-        'Status of the search. If the search was successful, the status will be "found". If the search was unsuccessful, the status will be "not_found".',
+      key: 'textResponse',
+      title: 'Text response',
+      description: 'The text response of the search result.',
       type: 'string',
       validation: {
         required: true,
       },
-    },
-    {
-      key: 'faqQuestion',
-      title: 'FAQ Question',
-      description: 'Question from the FAQ list.',
-      type: 'string',
-    },
-    {
-      key: 'faqAnswer',
-      title: 'FAQ Answer',
-      description: 'Answer from the FAQ list.',
-      type: 'string',
     },
   ],
 };
@@ -77,29 +64,53 @@ export async function handler({ input, configuration }: ActionContext): Promise<
   ]);
 
   // Convert the chat result to the output parameters
-  const result: any = {
-    searchStatus: 'not_found',
-    faqQuestion: undefined,
-    faqAnswer: undefined,
-  };
+  let textResponse: string;
   const functionCall = chatResult.additional_kwargs?.function_call;
   if (functionCall) {
     const faq = faqList[getIndexFromFunctionName(functionCall.name)];
-    result.searchStatus = 'found';
-    result.faqQuestion = faq.question;
-    result.faqAnswer = faq.answer;
+
+    textResponse =
+      'Here is an FAQ that is most relevant to your question prompt:\n\n' +
+      `*Question*: ${faq.question}\n` +
+      `*Answer*: ${faq.answer}\n\n` +
+      `If this is not the FAQ you are looking for, please report the missing FAQ to the manager.`;
+
+    await logRequest(
+      configuration.jsonKey,
+      configuration.faqLogSheetId,
+      configuration.questionPrompt,
+      'found',
+      faq.question,
+      faq.answer,
+    );
+  } else {
+    textResponse =
+      'Sorry, I could not find any relevant FAQs on the list.\n\nPlease report the missing FAQ to the manager.';
+
+    await logRequest(configuration.jsonKey, configuration.faqLogSheetId, input.questionPrompt, 'not_found');
   }
 
-  // Log the search to a separate Google Sheet
-  const logSheet = await authorizeAndGetSheet(configuration.jsonKey, configuration.faqLogSheetId);
+  // Return the output parameters
+  return {
+    textResponse,
+  };
+}
+
+// Log the search to a separate Google Sheet
+async function logRequest(
+  jsonKey: string,
+  faqLogSheetId: string,
+  questionPrompt: string,
+  searchStatus: string,
+  faqQuestion: string = '',
+  faqAnswer: string = '',
+) {
+  const logSheet = await authorizeAndGetSheet(jsonKey, faqLogSheetId);
   await logSheet.addRow({
-    'Question Prompt': input.questionPrompt,
-    'Search Status': result.searchStatus,
-    'FAQ Question': result.faqQuestion,
-    'FAQ Answer': result.faqAnswer,
+    'Question Prompt': questionPrompt,
+    'Search Status': searchStatus,
+    'FAQ Question': faqQuestion,
+    'FAQ Answer': faqAnswer,
     'Search Timestamp': new Date().toISOString(),
   });
-
-  // Return the output parameters
-  return result;
 }

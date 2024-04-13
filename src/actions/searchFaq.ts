@@ -75,9 +75,9 @@ export async function handler({
     //result.faqAnswer = faq.answer;
 
     textResponse =
-      'Here is a question in the FAQ list that is most relevant to your question prompt:\n\n' +
-      `*Question*: ${faq.question}\n` +
-      `*Answer*: ${faq.answer}\n\n` +
+      'Here is an FAQ that is most relevant to your question prompt:\n\n' +
+      `- *Question*: ${faq.question}\n` +
+      `- *Answer*: ${faq.answer}\n\n` +
       `If this is not the FAQ you are looking for, please report the missing FAQ to the manager.`;
 
     await logRequest(

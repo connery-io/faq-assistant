@@ -96,7 +96,7 @@ export async function handler({
       configurationParameters.jsonKey,
       configurationParameters.faqLogSheetId,
       inputParameters.questionPrompt,
-      'not found',
+      'not_found',
     );
   }
 

@@ -87,12 +87,7 @@ export async function handler({ input, configuration }: ActionContext): Promise<
     textResponse =
       'Sorry, I could not find any relevant FAQs on the list.\n\nPlease report the missing FAQ to the manager.';
 
-    await logRequest(
-      configuration.jsonKey,
-      configuration.faqLogSheetId,
-      input.questionPrompt,
-      'not_found',
-    );
+    await logRequest(configuration.jsonKey, configuration.faqLogSheetId, input.questionPrompt, 'not_found');
   }
 
   // Return the output parameters
@@ -102,7 +97,14 @@ export async function handler({ input, configuration }: ActionContext): Promise<
 }
 
 // Log the search to a separate Google Sheet
-async function logRequest(jsonKey, faqLogSheetId, questionPrompt, searchStatus, faqQuestion = '', faqAnswer = '') {
+async function logRequest(
+  jsonKey: string,
+  faqLogSheetId: string,
+  questionPrompt: string,
+  searchStatus: string,
+  faqQuestion: string = '',
+  faqAnswer: string = '',
+) {
   const logSheet = await authorizeAndGetSheet(jsonKey, faqLogSheetId);
   await logSheet.addRow({
     'Question Prompt': questionPrompt,

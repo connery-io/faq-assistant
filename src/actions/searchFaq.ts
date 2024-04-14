@@ -78,7 +78,7 @@ export async function handler({
       'Here is an FAQ that is most relevant to your question prompt:\n\n' +
       `*Question*: ${faq.question}\n` +
       `*Answer*: ${faq.answer}\n\n` +
-      `If this is not the FAQ you are looking for, please report the missing FAQ to the manager.`;
+      `💡If this is not the FAQ you are looking for, please report the missing FAQ to the manager.`;
 
     await logRequest(
       configurationParameters.jsonKey,
@@ -90,7 +90,7 @@ export async function handler({
     );
   } else {
     textResponse =
-      'Sorry, I could not find any relevant FAQs on the list.\n\nPlease report the missing FAQ to the manager.';
+      'Sorry, I could not find any relevant FAQs on the list.\n\n💡Please report the missing FAQ to the manager.';
 
     await logRequest(
       configurationParameters.jsonKey,

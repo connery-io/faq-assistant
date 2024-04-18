@@ -1,4 +1,4 @@
-import { PluginDefinition, startPluginServer } from 'connery';
+import { PluginDefinition, setupPluginServer } from 'connery';
 import searchFaq from './actions/searchFaq.js';
 
 const pluginDefinition: PluginDefinition = {
@@ -62,4 +62,5 @@ const pluginDefinition: PluginDefinition = {
   ],
 };
 
-startPluginServer(pluginDefinition);
+const handler = await setupPluginServer(pluginDefinition);
+export default handler;

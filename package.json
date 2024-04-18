@@ -6,7 +6,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "connery": "^0.1.0",
+    "connery": "^0.2.0",
     "google-auth-library": "^8.9.0",
     "google-spreadsheet": "^4.1.1",
     "langchain": "^0.0.187"

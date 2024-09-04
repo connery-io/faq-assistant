@@ -1,8 +1,8 @@
-# Google Sheets FAQ Plugin
+# Google Sheets
 
-The FAQ plugin allows you to ask questions and receive answers against a Google Sheet with a predefined list of questions and answers.
+Google Sheets plugin for Connery.
 
-## How to set up the plugin
+## How to set up the "Ask Google Sheets" action
 
 ### Prepare Google Sheets
 
@@ -17,19 +17,9 @@ This sheet should contain the list of questions and answers that the plugin will
   - The sheet may also contain other columns if needed.
 - Add the questions and answers to the sheet.
 
-**2. Create "FAQ Log" sheet**
+**2. Share the sheet with the service account**
 
-This sheet will be used to log all the questions asked to the plugin.
-
-![FAQ Log Google Sheet](/img/faq-log.png)
-
-- Create a "FAQ Log" Google Sheet with the following columns: "Question Prompt", "Search Status", "FAQ Question", "FAQ Answer", "Search Timestamp".
-  - The first row should contain the exact names of the columns.
-  - The sheet may also contain other columns if needed.
-
-**3. Share both sheets with the service account**
-
-- Share both Google Sheets with the service account email address (see below).
+- Share the "FAQ List" Google Sheet with the service account email address (see below).
 
 ### Create a service account on Google Cloud Platform
 
@@ -58,9 +48,10 @@ Follow these steps to get the JSON Key, grant access to the Google Sheet, and co
 - Click on “+ ENABLE APIS AND SERVICES” at the top.
 - Search for "Google Sheets API", select it, and click “Enable”.
 
-**4. Configure the plugin**
+**4. Configure the action**
 
-- Copy the JSON Key to the plugin configuration parameters when installin the plugin on the runner.
+- Install the plugin on on the Connery Platform.
+- Configure the action.
 
 ## Repository structure
 
@@ -73,7 +64,7 @@ This repository contains the plugin's source code.
 
 ## Built using Connery SDK
 
-This plugin is built using [Connery SDK](https://github.com/connery-io/connery), the open-source SDK for AI plugins and actions development.
+This plugin is built using [Connery SDK](https://github.com/connery-io/connery-sdk), the open-source SDK for creating AI plugins and actions.
 
 [Learn how to use the plugin and its actions.](https://sdk.connery.io/docs/quickstart/use-plugin)
 
